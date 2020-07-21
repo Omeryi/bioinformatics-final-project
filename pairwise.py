@@ -12,16 +12,10 @@ def get_sequences():
 
 
 if __name__ == '__main__':
-    k = 5
-    T = 24
-    db = 'VTSAQELRGCTVINGSLIINIRGGNNLAAELEANLG'
-    query = 'AANIEGGNNAAA'
-    matrix = substitution_matrices.load("BLOSUM62")
-    print("hi")
 
-    hsps = hsp.get_hsps(query, db, k, matrix, T)
-    print(hsps[0])
+    sequences, scoring_matrix = utils.parse_args(sys.argv)
+    mapped_sequences = utils.build_sequences_dict(sequences)
 
-    X = 20
-    msp = hsp.extend_hsp(query, db, hsp, matrix, X)
-    print(msp)
+    runtime_data = {}
+    alignments = {}
+

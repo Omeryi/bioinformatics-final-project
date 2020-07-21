@@ -1,6 +1,6 @@
-from copy import copy
+# import copy
 import utils
-
+from copy import copy
 ALPHABET = 'ARNDCQEGHILKMFPSTWYVBZX*'
 # NOF:
 # I changes a few names here so it makes more sense (db and query was less relevant)
@@ -62,6 +62,7 @@ def get_hsps(seq1, seq2, k, scoring_matrix, T):
     return hsps
 
 
+
 def extend_left(seq1, seq2, hsp, scoring_matrix, X):
     """returns the left extension with the maximal score"""
 
@@ -109,6 +110,8 @@ def find_msps(seq1, seq2, k, scoring_matrix, T, X):
         msps.add(msp)
 
     return msps
+
+
 
 
 
