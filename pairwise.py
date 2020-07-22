@@ -1,6 +1,7 @@
 import sys
 import utils
 import hsp_handle as HSP
+import time
 from Bio.Align import substitution_matrices
 
 
@@ -12,11 +13,11 @@ def get_sequences():
 
 
 if __name__ == '__main__':
+    start_time = time.time()
 
-    K = 11
-    T = 20
-    X = 100
-
+    K = 12
+    T = 60
+    X = 20
 
     sequences, scoring_matrix = utils.parse_args(sys.argv)
     mapped_sequences = utils.build_sequences_dict(sequences, K)
@@ -30,6 +31,6 @@ if __name__ == '__main__':
     runtime_data = {}
     alignments = {}
     print("done")
-
+    print("--- %s seconds ---" % (time.time() - start_time))
 
 
