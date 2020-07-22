@@ -1,10 +1,12 @@
-# import copy
+
 import utils
+import itertools
 from copy import copy
-ALPHABET = 'ARNDCQEGHILKMFPSTWYVBZX*'
+ALPHABET = 'ATGCSWRYKMBVHDNU'
 # NOF:
 # I changes a few names here so it makes more sense (db and query was less relevant)
 # the functions here may be changed so that the build of the dict will only happen once (it takes too long)
+
 
 class HSP():
     """Represents an alignment with score >=T between a kmer in the seq1 and a kmer in the seq2"""
@@ -42,10 +44,10 @@ class HSP():
 
 
 
-def get_hsps(seq1, seq2, k, scoring_matrix, T):
+def get_hsps(seq1, seq2, K, scoring_matrix, T):
     hsps = []
-    seq1_dict = utils.map_sequence(seq1, k)
-    seq2_dict = utils.map_sequence(seq2, k)
+    seq1_dict = utils.map_sequence(seq1, K)
+    seq2_dict = utils.map_sequence(seq2, K)
 
     for key, val in seq1_dict.items():
         neighbors = utils.find_neighbors(key, scoring_matrix, ALPHABET, T)
@@ -53,9 +55,9 @@ def get_hsps(seq1, seq2, k, scoring_matrix, T):
             if neighbor in seq2_dict.keys():
                 score = utils.align(key, neighbor, scoring_matrix)
                 for seq1_start in val:
-                    seq1_end = seq1_start + k - 1
+                    seq1_end = seq1_start + K - 1
                     for seq2_start in seq2_dict[neighbor]:
-                        seq2_end = seq2_start + k - 1
+                        seq2_end = seq2_start + K - 1
                         hsp = HSP(seq1_start, seq1_end, seq2_start, seq2_end, score)
                         hsps.append(hsp)
 
@@ -110,6 +112,21 @@ def find_msps(seq1, seq2, k, scoring_matrix, T, X):
         msps.add(msp)
 
     return msps
+
+def create_msps_dict(scoring_matrix, sequences, mapped_sequences, K, T, X):
+    msps_dict = {}
+    counter = 0
+
+    for pair in itertools.combinations(sequences.items(), r = 2):
+
+        seq1_id = pair[0][0]
+        seq1_dict = pair[0][1]
+        seq2_id = pair[1][0]
+        seq2_dict = pair[1][1]
+
+        msps_dict[(seq1_id, seq2_id)] = find_msps(seq1_dict, seq2_dict, K, scoring_matrix, T, X)
+
+    return msps_dict
 
 
 

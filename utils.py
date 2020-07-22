@@ -9,17 +9,18 @@ def parse_args(args):
     scoring_matrix = read_scoring_matrix(args[1])
 
     sequences = {}
-    for i in range(2, num_of_args - 1):
+    for i in range(2, num_of_args + 1):
+        print(i)
         sequence_name, sequence = read_seq_file(args[i])
         sequences[sequence_name] = sequence
 
     return sequences, scoring_matrix
 
 
-def build_sequences_dict(sequences):
+def build_sequences_dict(sequences, K):
     mapped_sequences = {}
     for sequence_name, sequence in sequences.items():
-        sequence_dict = map_sequence(sequence, 4)
+        sequence_dict = map_sequence(sequence, K)
         mapped_sequences[sequence_name] = sequence_dict
 
     return mapped_sequences
