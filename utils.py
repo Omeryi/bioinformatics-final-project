@@ -1,8 +1,43 @@
 from collections import defaultdict
 
-# TODO: write a function that parses the file 'sub_mat.txt'
-def parse_subtitution_matrix(scoring_matrix_path):
-    pass
+def parse_args(args):
+    num_of_args = len(args) - 1
+
+    if (num_of_args < 3):
+        raise ValueError('One or more arguments are missing')
+
+    scoring_matrix = read_scoring_matrix(args[1])
+
+    sequences = {}
+    for i in range(2, num_of_args + 1):
+        print(i)
+        sequence_name, sequence = read_seq_file(args[i])
+        sequences[sequence_name] = sequence
+
+    return sequences, scoring_matrix
+
+
+def build_sequences_dict(sequences, K):
+    mapped_sequences = {}
+    for sequence_name, sequence in sequences.items():
+        sequence_dict = map_sequence(sequence, K)
+        mapped_sequences[sequence_name] = sequence_dict
+
+    return mapped_sequences
+
+def read_scoring_matrix(path):
+    scoring_matrix = {}
+
+    with open(path) as f:
+        chars = f.readline().strip().split()
+
+        for line in f:
+            ch1, *scores = line.strip().split()
+
+            for i, score in enumerate(scores):
+                scoring_matrix[(ch1, chars[i])] = int(score)
+
+    return scoring_matrix
 
 
 def read_seq_file(seq_file):
@@ -33,7 +68,15 @@ def align(seq1, seq2, scoring_matrix):
     score = 0
 
     for i in range(len(seq1)):
-        score += scoring_matrix[seq1[i], seq2[i]]
+        try:
+            score += scoring_matrix[seq1[i],seq2[i]]
+        except IndexError:
+            print("i", i)
+            print("seq1:" , seq1)
+            print("seq2:", seq2)
+            print("seq1[i]:", seq1[i])
+            print("seq2[i]:", seq2[i])
+            print("##################")
 
     return score
 
