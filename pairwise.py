@@ -15,9 +15,9 @@ def get_sequences():
 if __name__ == '__main__':
     start_time = time.time()
 
-    K = 12
-    T = 60
-    X = 20
+    K = 4
+    T = 20
+    X = 100
 
     sequences, scoring_matrix = utils.parse_args(sys.argv)
     mapped_sequences = utils.build_sequences_dict(sequences, K)
