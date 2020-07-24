@@ -1,9 +1,10 @@
 from collections import defaultdict
 
+
 def parse_args(args):
     num_of_args = len(args) - 1
 
-    if (num_of_args < 3):
+    if num_of_args < 3:
         raise ValueError('One or more arguments are missing')
 
     scoring_matrix = read_scoring_matrix(args[1])
@@ -24,6 +25,7 @@ def build_sequences_dict(sequences, K):
         mapped_sequences[sequence_name] = sequence_dict
 
     return mapped_sequences
+
 
 def read_scoring_matrix(path):
     scoring_matrix = {}
@@ -97,7 +99,7 @@ def find_neighbors_rec(kmer, neighbor, pos, curr_score, alphabet, neighbors, sco
     else:
         for char in alphabet:
             score = curr_score - scoring_matrix[kmer[pos], kmer[pos]] + scoring_matrix[kmer[pos], char]
-            if (score) >= T:
+            if score >= T:
                 neighbor = list(neighbor)
                 neighbor[pos] = char
                 neighbor = "".join(neighbor)

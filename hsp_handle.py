@@ -1,4 +1,3 @@
-
 import utils
 import itertools
 from copy import copy
@@ -43,7 +42,6 @@ class HSP():
         return self.__str__()
 
 
-
 def get_hsps(seq1, seq2, K, scoring_matrix, T):
     hsps = []
     seq1_dict = utils.map_sequence(seq1, K)
@@ -64,17 +62,16 @@ def get_hsps(seq1, seq2, K, scoring_matrix, T):
     return hsps
 
 
-
 def extend_left(seq1, seq2, hsp, scoring_matrix, X):
     """returns the left extension with the maximal score"""
 
     msp = copy(hsp)
 
-    while (hsp.score > msp.score - X and hsp.seq1_start > 0 and hsp.seq2_start > 0):
+    while hsp.score > msp.score - X and hsp.seq1_start > 0 and hsp.seq2_start > 0:
         hsp.seq1_start = hsp.seq1_start - 1
         hsp.seq2_start = hsp.seq2_start - 1
         hsp.score = hsp.score + scoring_matrix[seq1[hsp.seq1_start], seq2[hsp.seq2_start]]
-        if (hsp.score > msp.score):
+        if hsp.score > msp.score:
             msp = copy(hsp)
 
     return msp
@@ -85,11 +82,11 @@ def extend_right(seq1, seq2, hsp, scoring_matrix, X):
 
     msp = copy(hsp)
 
-    while (hsp.score > msp.score - X and hsp.seq1_end < len(seq1) - 1 and hsp.seq2_end < len(seq2) - 1):
+    while hsp.score > msp.score - X and hsp.seq1_end < len(seq1) - 1 and hsp.seq2_end < len(seq2) - 1:
         hsp.seq1_end = hsp.seq1_end + 1
         hsp.seq2_end = hsp.seq2_end + 1
         hsp.score = hsp.score + scoring_matrix[seq1[hsp.seq1_end], seq2[hsp.seq2_end]]
-        if (hsp.score > msp.score):
+        if hsp.score > msp.score:
             msp = copy(hsp)
 
     return msp
@@ -112,6 +109,7 @@ def find_msps(seq1, seq2, k, scoring_matrix, T, X):
         msps.add(msp)
 
     return msps
+
 
 def create_msps_dict(scoring_matrix, sequences, mapped_sequences, K, T, X):
     msps_dict = {}
