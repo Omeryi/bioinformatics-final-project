@@ -30,7 +30,7 @@ if __name__ == '__main__':
     print(check)
     # msps = HSP.create_msps_dict(scoring_matrix, sequences, mapped_sequences, K, T, X)
 
-    #print(msps)
+    # print(msps)
     runtime_data = {}
     alignments = {}
     print("done")
@@ -41,8 +41,10 @@ if __name__ == '__main__':
     print("--- CHECK: GRAPH SECTION ---")
     g = graph_handle.creating_graph(check[('A', 'C')])
     path = graph_handle.find_path(g)
-    path_score = graph_handle.compute_pairwise_score(path)
+    path_score = graph_handle.compute_pairwise_score(path, g)
     print("the path is: " + str(path) + "\n the score of the path is: " + str(path_score))
+
+    graph_handle.drawing_graph(g)
 
 
 
