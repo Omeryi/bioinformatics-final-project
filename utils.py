@@ -105,3 +105,13 @@ def find_neighbors_rec(kmer, neighbor, pos, curr_score, alphabet, neighbors, sco
                 find_neighbors_rec(kmer, neighbor, pos + 1, score, alphabet, neighbors, scoring_matrix, T)
 
 
+def creating_file_for_final_scores(msps_dict, scores_list):
+    f = open("scores_genomes.txt", "w")
+    counter = 0
+    for sequences in msps_dict.keys():
+        seq1 = sequences[0]
+        seq2 = sequences[1]
+        f.write(seq1 + "\t" + seq2 + "\t" + str(scores_list[counter]))
+        counter += 1
+
+    f.close()
