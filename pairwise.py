@@ -2,6 +2,7 @@ import sys
 import utils
 import hsp_handle as HSP
 import time
+import graph_handle
 # from Bio.Align import substitution_matrices
 
 
@@ -15,12 +16,12 @@ def get_sequences():
 if __name__ == '__main__':
     start_time = time.time()
 
-    # K = 4
-    # T = 20
-    # X = 100
     K = 4
     T = 20
     X = 100
+    # K = 12
+    # T = 60
+    # X = 20
 
     sequences, scoring_matrix = utils.parse_args(sys.argv)
     mapped_sequences = utils.build_sequences_dict(sequences, K)
@@ -34,8 +35,14 @@ if __name__ == '__main__':
     alignments = {}
     print("done")
     print("--- %s seconds ---" % (time.time() - start_time))
+    print("....................................................................................................")
 
-    print("checking the graph section...")
+    print()
+    print("--- CHECK: GRAPH SECTION ---")
+    g = graph_handle.creating_graph(check[('A', 'C')])
+    path = graph_handle.find_path(g)
+    path_score = graph_handle.compute_pairwise_score(path)
+    print("the path is: " + str(path) + "\n the score of the path is: " + str(path_score))
 
 
 
