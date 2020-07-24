@@ -11,7 +11,6 @@ def parse_args(args):
 
     sequences = {}
     for i in range(2, num_of_args + 1):
-        print(i)
         sequence_name, sequence = read_seq_file(args[i])
         sequences[sequence_name] = sequence
 

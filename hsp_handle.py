@@ -34,18 +34,27 @@ class HSP():
     def __str__(self):
         return f''' 
                 Score: {self.score} 
-                Query: [{self.seq1_start}, {self.seq1_end}] 
-                DB: [{self.seq2_start}, {self.seq2_end}] 
+                Sequence1: [{self.seq1_start}, {self.seq1_end}] 
+                Sequence2: [{self.seq2_start}, {self.seq2_end}] 
                 '''
 
     def __repr__(self):
         return self.__str__()
 
 
-def get_hsps(seq1, seq2, K, scoring_matrix, T):
+def should_extend_hsp(hsp, msps_list):
+    for msp in msps_list:
+        if hsp.seq1_end <= msp.seq1_end and hsp.seq1_start >= msp.seq1_start:
+            if hsp.seq2_end <= msp.seq2_end and hsp.seq2_start >= msp.seq2_start:
+                return False
+
+    return True
+
+
+def get_hsps(seq1_dict, seq2_dict, K, scoring_matrix, T):
     hsps = []
-    seq1_dict = utils.map_sequence(seq1, K)
-    seq2_dict = utils.map_sequence(seq2, K)
+    #seq1_dict = utils.map_sequence(seq1, K)
+    #seq2_dict = utils.map_sequence(seq2, K)
 
     for key, val in seq1_dict.items():
         neighbors = utils.find_neighbors(key, scoring_matrix, ALPHABET, T)
@@ -99,14 +108,15 @@ def extend_hsp(seq1, seq2, hsp, scoring_matrix, X):
     return msp
 
 
-def find_msps(seq1, seq2, k, scoring_matrix, T, X):
-    msps = set()
-    hsps = get_hsps(seq1, seq2, k, scoring_matrix, T)
+def find_msps(seq1, seq1_dict, seq2, seq2_dict, k, scoring_matrix, T, X):
+    msps = []
+    hsps = get_hsps(seq1_dict, seq2_dict, k, scoring_matrix, T)
 
 # there is a need to add counter (according to the assignment)
     for hsp in hsps:
-        msp = extend_hsp(seq1, seq2, hsp, scoring_matrix, X)
-        msps.add(msp)
+        if should_extend_hsp(hsp, msps):
+            msp = extend_hsp(seq1, seq2, hsp, scoring_matrix, X)
+            msps.append(msp)
 
     return msps
 
@@ -122,7 +132,7 @@ def create_msps_dict(scoring_matrix, sequences, mapped_sequences, K, T, X):
         seq2_id = pair[1][0]
         seq2_dict = pair[1][1]
 
-        msps_dict[(seq1_id, seq2_id)] = find_msps(seq1_dict, seq2_dict, K, scoring_matrix, T, X)
+        msps_dict[(seq1_id, seq2_id)] = find_msps(sequences[seq1_id], mapped_sequences[seq1_id], sequences[seq2_id], mapped_sequences[seq2_id], K, scoring_matrix, T, X)
 
     return msps_dict
 
