@@ -8,7 +8,7 @@ def find_path(graph):
 
 
 def compute_weight(score1, score2, distance_seq1, distance_seq2):
-    return score1 + score2 - distance_seq1 - distance_seq2
+    return (score1 + score2) / (distance_seq1 + distance_seq2)
 
 
 def calculate_distance(msp1, msp2):
