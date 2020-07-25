@@ -37,22 +37,35 @@ if __name__ == '__main__':
     print("--- %s seconds ---" % (time.time() - start_time))
     print("....................................................................................................")
 
+# CODE FOR CHECKING THE FILES A. B. C
     # print()
     # print("--- CHECK: GRAPH SECTION ---")
     # g = graph_handle.creating_graph(check[('A', 'C')])
     # path = graph_handle.find_path(g)
     # path_score = graph_handle.compute_pairwise_score(path, g)
     # print("the path is: " + str(path) + "\n the score of the path is: " + str(path_score))
-
     # graph_handle.drawing_graph(g)
-    score_list = []
+
+
+# CODE FOR CHECKING TASK 5
+    print()
+    print("--- CHECK: GRAPH SECTION ---")
     for pair in check.values():
         g = graph_handle.creating_graph(pair)
         path = graph_handle.find_path(g)
         path_score = graph_handle.compute_pairwise_score(path, g)
-        score_list.append(path_score)
+        print("the path is: " + str(path) + "\n the score of the path is: " + str(path_score))
 
-    utils.creating_file_for_final_scores(check, score_list)
+
+# CODE FOR CREATING A FILE FOR THE FINAL SCORES
+    # score_list = []
+    # for pair in check.values():
+    #     g = graph_handle.creating_graph(pair)
+    #     path = graph_handle.find_path(g)
+    #     path_score = graph_handle.compute_pairwise_score(path, g)
+    #     score_list.append(path_score)
+    #
+    # utils.creating_file_for_final_scores(check, score_list)
 
 
 

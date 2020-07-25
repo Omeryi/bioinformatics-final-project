@@ -111,7 +111,7 @@ def creating_file_for_final_scores(msps_dict, scores_list):
     for sequences in msps_dict.keys():
         seq1 = sequences[0]
         seq2 = sequences[1]
-        f.write(seq1 + "\t" + seq2 + "\t" + str(scores_list[counter]))
+        f.write(seq1 + "\t" + seq2 + "\t" + str(scores_list[counter]) + "\n")
         counter += 1
 
     f.close()
