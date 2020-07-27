@@ -108,31 +108,33 @@ def extend_hsp(seq1, seq2, hsp, scoring_matrix, X):
     return msp
 
 
-def find_msps(seq1, seq1_dict, seq2, seq2_dict, k, scoring_matrix, T, X):
+def find_msps(seq1_id, seq1, seq1_dict, seq2_id, seq2, seq2_dict, k, scoring_matrix, T, X):
     msps = []
     hsps = get_hsps(seq1_dict, seq2_dict, k, scoring_matrix, T)
+    msps_count = 0
+    hsps_count = 0
 
 # there is a need to add counter (according to the assignment)
     for hsp in hsps:
+        hsps_count += 1
         if should_extend_hsp(hsp, msps):
             msp = extend_hsp(seq1, seq2, hsp, scoring_matrix, X)
             msps.append(msp)
+            msps_count += 1
 
+    utils.write_additinal_data(seq1_id, seq2_id, hsps_count, msps_count)
     return msps
 
 
 def create_msps_dict(scoring_matrix, sequences, mapped_sequences, K, T, X):
     msps_dict = {}
-    counter = 0
 
     for pair in itertools.combinations(sequences.items(), r = 2):
 
         seq1_id = pair[0][0]
-        seq1_dict = pair[0][1]
         seq2_id = pair[1][0]
-        seq2_dict = pair[1][1]
 
-        msps_dict[(seq1_id, seq2_id)] = find_msps(sequences[seq1_id], mapped_sequences[seq1_id], sequences[seq2_id], mapped_sequences[seq2_id], K, scoring_matrix, T, X)
+        msps_dict[(seq1_id, seq2_id)] = find_msps(seq1_id, sequences[seq1_id], mapped_sequences[seq1_id], seq2_id, sequences[seq2_id], mapped_sequences[seq2_id], K, scoring_matrix, T, X)
 
     return msps_dict
 

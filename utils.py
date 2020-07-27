@@ -1,5 +1,6 @@
 from collections import defaultdict
-
+STR_PADDING_SIZE = 30
+COUNT_STR_PADDING_SIZE = 10
 
 def parse_args(args):
     num_of_args = len(args) - 1
@@ -70,7 +71,7 @@ def align(seq1, seq2, scoring_matrix):
 
     for i in range(len(seq1)):
         try:
-            score += scoring_matrix[seq1[i],seq2[i]]
+            score += scoring_matrix[seq1[i], seq2[i]]
         except IndexError:
             print("i", i)
             print("seq1:" , seq1)
@@ -106,7 +107,7 @@ def find_neighbors_rec(kmer, neighbor, pos, curr_score, alphabet, neighbors, sco
 
 
 def creating_file_for_final_scores(msps_dict, scores_list):
-    f = open("scores_genomes.txt", "w")
+    f = open("scores_genomesK12T58X30_accurate.txt", "w")
     counter = 0
     for sequences in msps_dict.keys():
         seq1 = sequences[0]
@@ -115,3 +116,9 @@ def creating_file_for_final_scores(msps_dict, scores_list):
         counter += 1
 
     f.close()
+
+def write_additinal_data(seq1, seq2, hsps_count, msps_count):
+    fp = open("Additional_Data.txt", "a")
+    fp.write(('Sequence1 id: {} Sequence2 id: {} HSPs found: {} MSPs found: {}\n'
+              .format(seq1.ljust(STR_PADDING_SIZE), seq2.ljust(STR_PADDING_SIZE),
+                      str(hsps_count).ljust(COUNT_STR_PADDING_SIZE), str(msps_count).ljust(COUNT_STR_PADDING_SIZE))))
