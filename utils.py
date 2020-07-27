@@ -1,6 +1,11 @@
 from collections import defaultdict
+import graph_handle
+
 STR_PADDING_SIZE = 30
 COUNT_STR_PADDING_SIZE = 10
+SCORES_FILE_NAME = 'scores_genomes.txt'
+ADDITIONAL_FILE_NAME = 'additional_data.txt'
+
 
 def parse_args(args):
     num_of_args = len(args) - 1
@@ -12,17 +17,17 @@ def parse_args(args):
 
     sequences = {}
     for i in range(2, num_of_args + 1):
-        sequence_name, sequence = read_seq_file(args[i])
-        sequences[sequence_name] = sequence
+        sequence_id, sequence = read_seq_file(args[i])
+        sequences[sequence_id] = sequence
 
     return sequences, scoring_matrix
 
 
 def build_sequences_dict(sequences, K):
     mapped_sequences = {}
-    for sequence_name, sequence in sequences.items():
+    for sequence_id, sequence in sequences.items():
         sequence_dict = map_sequence(sequence, K)
-        mapped_sequences[sequence_name] = sequence_dict
+        mapped_sequences[sequence_id] = sequence_dict
 
     return mapped_sequences
 
@@ -70,15 +75,7 @@ def align(seq1, seq2, scoring_matrix):
     score = 0
 
     for i in range(len(seq1)):
-        try:
-            score += scoring_matrix[seq1[i], seq2[i]]
-        except IndexError:
-            print("i", i)
-            print("seq1:" , seq1)
-            print("seq2:", seq2)
-            print("seq1[i]:", seq1[i])
-            print("seq2[i]:", seq2[i])
-            print("##################")
+        score += scoring_matrix[seq1[i], seq2[i]]
 
     return score
 
@@ -106,8 +103,8 @@ def find_neighbors_rec(kmer, neighbor, pos, curr_score, alphabet, neighbors, sco
                 find_neighbors_rec(kmer, neighbor, pos + 1, score, alphabet, neighbors, scoring_matrix, T)
 
 
-def creating_file_for_final_scores(msps_dict, scores_list):
-    f = open("scores_genomesK12T58X30_accurate.txt", "w")
+def create_file_for_final_scores(msps_dict, scores_list):
+    f = open(SCORES_FILE_NAME, "w")
     counter = 0
     for sequences in msps_dict.keys():
         seq1 = sequences[0]
@@ -117,8 +114,21 @@ def creating_file_for_final_scores(msps_dict, scores_list):
 
     f.close()
 
-def write_additinal_data(seq1, seq2, hsps_count, msps_count):
-    fp = open("Additional_Data.txt", "a")
+
+def write_additional_data(seq1, seq2, hsps_count, msps_count):
+    fp = open(ADDITIONAL_FILE_NAME, "a")
     fp.write(('Sequence1 id: {} Sequence2 id: {} HSPs found: {} MSPs found: {}\n'
               .format(seq1.ljust(STR_PADDING_SIZE), seq2.ljust(STR_PADDING_SIZE),
                       str(hsps_count).ljust(COUNT_STR_PADDING_SIZE), str(msps_count).ljust(COUNT_STR_PADDING_SIZE))))
+
+
+def calculate_scores(msps):
+    scores_list = []
+    for pair in msps.values():
+        g = graph_handle.create_graph(pair)
+        path = graph_handle.find_path(g)
+        path_score = graph_handle.compute_pairwise_score(path, g)
+        scores_list.append(path_score)
+
+    return scores_list
+
