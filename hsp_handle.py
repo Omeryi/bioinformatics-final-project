@@ -50,8 +50,6 @@ def should_extend_hsp(hsp, msps_list):
 
 def get_hsps(seq1_dict, seq2_dict, K, scoring_matrix, T):
     hsps = []
-    # seq1_dict = utils.map_sequence(seq1, K)
-    # seq2_dict = utils.map_sequence(seq2, K)
 
     for key, val in seq1_dict.items():
         neighbors = utils.find_neighbors(key, scoring_matrix, ALPHABET, T)

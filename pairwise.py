@@ -4,7 +4,6 @@ import hsp_handle as HSP
 import time
 
 
-
 if __name__ == '__main__':
 
     start_time = time.time()
@@ -18,14 +17,15 @@ if __name__ == '__main__':
     # For efficiency purposes, all sequences are mapped in advance
     mapped_sequences = utils.build_sequences_dict(sequences, K)
     msps = HSP.create_msps_dict(scoring_matrix, sequences, mapped_sequences, K, T, X)
-    scores_list = utils.caculate_scores(msps)
+    scores_list = utils.calculate_scores(msps)
 
     utils.create_file_for_final_scores(msps, scores_list)
 
     total_runtime = (time.time() - start_time)
+
     fp = open(utils.ADDITIONAL_FILE_NAME, "a")
     fp.write(('\nTotal runtime of the program: {} Seconds\n'.format(total_runtime)))
-    print("--- %s seconds ---" % total_runtime)
+
 
 
 
