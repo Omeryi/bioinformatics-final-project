@@ -58,7 +58,7 @@ def compute_pairwise_score(path, G):
     return max(total_score, msp_max_score)
 
 
-# this function can be used for debug purposes
+# This function can be used for debug purposes
 def draw_graph(graph):
     pos = nx.spring_layout(graph)
     nx.draw_networkx_nodes(graph, pos, cmap=plt.get_cmap('jet'), node_size=500)
